@@ -57,6 +57,8 @@ setup(name=PACKAGE_NAME,
       author_email=AUTHOR_EMAIL,
       url=URL,
       install_requires=INSTALL_REQUIRES,
-      extras_require = DEV_REQUIRES,
-      packages=find_packages()
+      extras_require=DEV_REQUIRES,
+      packages=find_packages(),
+      py_modules=['sanfis'],
+      package_dir={'': 'sanfis'},
       )
