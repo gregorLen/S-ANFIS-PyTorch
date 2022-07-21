@@ -6,7 +6,7 @@ This is a PyTorch-based implementation of my project S-ANFIS: [State-ANFIS: A Ge
 
 S-ANFIS is a simple generalization of the ANFIS network, where the input to the premise and the consequence part of the model can be controlled separately. As general notation, I call the input the premise part "state" variables ``s`` and the input of the consequence part "input" or "explanatory" variables ``x``. 
 
-![S-ANFIS architecture](img/sanfis_architecture.pdf)
+![S-ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/sanfis_architecture.pdf?raw=true)
 
 For an in-depth explaination, check out [our paper](https://ieeexplore.ieee.org/abstract/document/9776208).
 
