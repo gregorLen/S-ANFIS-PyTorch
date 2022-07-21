@@ -20,7 +20,7 @@ from sklearn.exceptions import NotFittedError
 
 
 class SANFIS(nn.Module):
-    def __init__(self, membfuncs: list, n_input: int, to_device: Optional[str] = None, scale: str = 'Std', name: str = 'S-ANFIS'):
+    def __init__(self, membfuncs: list, n_input: int, to_device: Optional[str] = None, scale: str = 'None', name: str = 'S-ANFIS'):
         """State-Adaptie Neuro-Fuzzy Inference System (S-ANFIS)
 
         Parameters
@@ -57,7 +57,7 @@ class SANFIS(nn.Module):
         to_device : str
             On which device to run the model. ``'gpu'`` or ``'cpu'``.
         scale : str
-            Type of scaling to be performed. Possible values are ``'Std'`` or ``None``.
+            Type of scaling to be performed. Possible values are ``'Std'`` or ``'None'``.
         name : str
             Name of the model.
         """
@@ -294,7 +294,7 @@ class SANFIS(nn.Module):
         else:
             return y_pred
 
-    def plotmfs(self, show_initial_weights=True, show_firingstrength: bool = True, bounds: Optional[list] = None, names: Optional[list] = None, show_title: bool = True, save_path: Optional[str] = None):
+    def plotmfs(self, show_initial_weights=True, show_firingstrength: bool = True, bounds: Optional[list] = None, names: Optional[list] = None, title: Optional[str] = None, show_title: bool = True, save_path: Optional[str] = None):
         """Plots the membership functions.
 
         Args:
@@ -302,6 +302,7 @@ class SANFIS(nn.Module):
             show_firingstrength (bool, optional): Show (normalized) firing strength as area plot. Defaults to True.
             bounds (Optional[list], optional): Bounds of the respective membership function. Defaults to None.
             names (Optional[list], optional): Names of the respective (state) variable. Defaults to None.
+            title (str, optional): Title of the plot.
             show_title (bool, optional): Defaults to True.
             save_path (Optional[str], optional): Path to save the plot. Defaults to None.
         """
@@ -337,15 +338,17 @@ class SANFIS(nn.Module):
             plot_names = [
                 f'State Variable {s+1} ({self.premise[s]["function"]})' for s in range(self.n_statevars)]
         else:
-            plot_names = [
-                f'State Variable {name}' for name in names]
+            plot_names = names
 
         # setup plot
         plt.style.use('seaborn')
         fig, ax = plt.subplots(
             nrows=self.n_statevars, ncols=1, figsize=(8, self.n_statevars * 3))
         if show_title:
-            fig.suptitle(f'Membership functions {self.name}', size=16)
+            if title == None:
+                fig.suptitle(f'Membership functions {self.name}', size=16)
+            else:
+                fig.suptitle(title, size=16)
         fig.subplots_adjust(hspace=0.4)
 
         # plot curves
