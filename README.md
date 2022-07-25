@@ -251,6 +251,13 @@ plottingtools.plt_prediction(y, y_pred, save_path='img/mackey_prediction.pdf')
 
 ![prediction mackey time series](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/mackey_prediction.png)
 
+## 6. Related work
+
+- [AnfisTensorflow2.0](https://github.com/gregorLen/AnfisTensorflow2.0) by me
+- [bare-bones implementation of ANFIS](https://github.com/twmeggs/anfis) (manual derivatives) by [twmeggs](https://github.com/twmeggs) 
+- [PyTorch implementation](https://github.com/jfpower/anfis-pytorch) by [James Power](http://www.cs.nuim.ie/~jpower/)
+- [simple ANFIS based on Tensorflow 1.15.2](https://github.com/tiagoCuervo/TensorANFIS) by [Santiago Cuervo](https://github.com/tiagoCuervo)
+
 ## Contact
 I am very thankful for feedback. Also, if you have questions, please contact gregor.lenhard92@gmail.com
 
