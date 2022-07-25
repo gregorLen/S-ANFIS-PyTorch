@@ -270,7 +270,7 @@ class SANFIS_Process:
 
         # save plot
         if save_path != None:
-            fig.savefig(os.path.join(save_path, 'dgp_process.pdf'),
+            fig.savefig(os.path.join(save_path, 'sanfis_dgp_process.pdf'),
                         bbox_inches='tight', pad_inches=0)
 
     def plotmfs(self, show_equation: bool = False, save_path: Optional[str] = None):
@@ -336,15 +336,25 @@ def gen_data_ts(n_obs: int, dgp_params: Optional[dict] = None, lag: int = 1, tes
         S, S_train, S_valid, X, X_train, X_valid, y, y_train, y_valid: Raw/Train/valid Samples for S, X, and y.
     """
     if dgp_params == None:
-        dgp_params = {"mu_params": np.array([[0.2, -0.25, 0.1, 0.0]]),
-                      "sigma_params": np.array([[0.05, 0.05, 0.05, 0.05]]),
-                      "AR_params": np.array([[0.2, 0.5, -0.3, 0.1],
-                                             [0.0, 0.0, 0.0, 0.0]]),
-                      "a_params": np.array([[10.5, 10.5],   # gauss: standard deviation  // sigmoid: steepness (gamma)
-                                            [-10.5, -10.5]]),
-                      "c_params": np.array([[0.0, 0.0],  # center of the curve or bell
-                                            [0.0, 0.0]]),
-                      "memb_func": "gaussian"}
+        # dgp_params = {"mu_params": np.array([[0.2, -0.25, 0.1, 0.0]]),
+                      # "sigma_params": np.array([[0.05, 0.05, 0.05, 0.05]]),
+                      # "AR_params": np.array([[0.2, 0.5, -0.3, 0.1],
+                                             # [0.0, 0.0, 0.0, 0.0]]),
+                      # "a_params": np.array([[10.5, 10.5],   # gauss: standard deviation  // sigmoid: steepness (gamma)
+                                            # [-10.5, -10.5]]),
+                      # "c_params": np.array([[0.0, 0.0],  # center of the curve or bell
+                                            # [0.0, 0.0]]),
+                      # "memb_func": "gaussian"}
+        dgp_params = {"mu_params": np.array([[0.4, 0.0, 0.2, -0.4]]),
+                        "sigma_params": np.array([[0.1, 0.1, 0.1, 0.1]]),
+                    "AR_params": np.array([[0.2, 0.5, -0.3, 0.1],
+                                            [0.1, 0.1, 0.2, -0.1]]),
+                    "memb_func": 'sigmoid',
+                    "a_params": np.array([[1.5, 15.5],   # gauss: standard deviation  // sigmoid: steepness (gamma)
+                                            [-15.5, -2.5]]),
+                    "c_params": np.array([[-3.0, -5.0],  # center of the curve or bell
+                                            [3.0, 1.0]]),
+                            "memb_func": "sigmoid"}
 
     n_input = dgp_params['AR_params'].shape[0]
 
