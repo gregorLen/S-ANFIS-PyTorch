@@ -6,7 +6,7 @@ This is a PyTorch-based implementation of my project S-ANFIS: [State-ANFIS: A Ge
 
 S-ANFIS is a simple generalization of the ANFIS network, where the input to the premise and the consequence part of the model can be controlled separately. As general notation, I call the input the premise part "state" variables ``s`` and the input of the consequence part "input" or "explanatory" variables ``x``. 
 
-![S-ANFIS architecture](../blob/master/img/sanfis_architecture.pdf?raw=true)
+![S-ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/sanfis_architecture.pdf)
 
 For an in-depth explaination, check out [our paper](https://ieeexplore.ieee.org/abstract/document/9776208).
 
@@ -85,37 +85,45 @@ model.plotmfs(
 The implementation allows a very flexible usage of membership functions. For each input variable that enters the premise-part of the model, the type and number of membership functions can be flexibly chosen. As of today, three possible membership functions are implemented:
 
 #### Gaussian
+The Gaussian is described by 2 parameters, `mu` for the location and `sigma` for the wideness.
+
 ```python
 # Example
 gaussian_membfunc = {'function': 'gaussian',
-						 'n_memb': 3,
-						 'params': {'mu': {'value': [-2.0, 0.0, 1.5],
-						                'trainable': True},
-						           'sigma': {'value': [1.0, 0.5, 1.0],
-						               'trainable': True}}
-						}
+			 'n_memb': 3,	 # 3 membership functions
+			 'params': {'mu': {'value': [-2.0, 0.0, 1.5], 
+			                'trainable': True},
+			           'sigma': {'value': [1.0, 0.5, 1.0],
+			               'trainable': True}}
+			}
 ```
 
+In this example, three membership functions are considered.
+
 #### General bell-shaped
+The general bell-shaped function is described by three parameters, `a` (wideness), `b` (shape) and `c` (location).
+
 ```python
 bell_membfunc = {'function': 'bell',
-					'n_memb': 2,
-					'params': {'c': {'value': [-1.5, 1.5],
-					                'trainable': True},
-					            'a': {'value': [3.0, 1.0],
-					                'trainable': False},
-					            'b': {'value': [1.0, 3.0],
-					                'trainable': False}}
+			'n_memb': 2,
+			'params': {'c': {'value': [-1.5, 1.5],
+			                'trainable': True},
+			            'a': {'value': [3.0, 1.0],
+			                'trainable': False},
+			            'b': {'value': [1.0, 3.0],
+			                'trainable': False}}
 					}
 ```
 #### Sigmoid
+The sigmoid is described by two parameters: `c` (location) and `gamma` (steepness).
+
 ```python
 sigmoid_membfunc = {'function': 'sigmoid',
-						'n_memb': 2,
-						'params': {'c': {'value': [0.0, 0.0],
-						                'trainable': True},
-						            'gamma': {'value': [-2.5, 2.5],
-						                    'trainable': True}}
+			'n_memb': 2,
+			'params': {'c': {'value': [0.0, 0.0],
+			                'trainable': True},
+			            'gamma': {'value': [-2.5, 2.5],
+			                    'trainable': True}}
 }
 ```
 
@@ -123,11 +131,14 @@ Remember to add a list of membership functions as `membfunc` argument when creat
 
 ```python
 MEMBFUNCS = [gaussian_membfunc, bell_membfunc, sigmoid_membfunc]
-model = SANFIS(membfuncs=MEMBFUNCS,
-			   n_input = ...
-			   scale = ...
-			   )
+model = SANFIS(MEMBFUNCS, n_input=2)
+model.plotmfs(bounds=[[-2.0, 2.0],  # plot bounds for first membfunc
+                      [-4.0, 2.0],  # plot bounds for second membfunc
+                      [-5.0, 5.0]],  # plot bounds fo third membfunc
+              save_path='img/membfuncs.pdf')
 ```
+
+![membership functions](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/membfuncs.pdf)
 
 ### 4.2 Tensorboard
 Tensorboard provides visualization needed for machine learning experimentation. Further information can be found [here](https://www.tensorflow.org/tensorboard)
@@ -157,25 +168,80 @@ tensorboard --logdir=logs/tb
 
 
 ## 5. Using the plain vanilla ANFIS network
-To use the plain vanilla ANFIS network, simply remove the state variables `s` from the training:
+![ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/anfis_architecture.pdf)
+
+To use the plain vanilla ANFIS network, simply remove the state variables `s` from the training (`fit()`). This automatically sets the same input for premise and consequence part of the model.
 
 ```python
+# Set 4 input variables with 3 gaussian membership functions each
+MEMBFUNCS = [
+    {'function': 'gaussian',
+     'n_memb': 3,
+     'params': {'mu': {'value': [-0.5, 0.0, 0.5],
+                       'trainable': True},
+                'sigma': {'value': [1.0, 1.0, 1.0],
+                          'trainable': True}}},
+
+    {'function': 'gaussian',
+     'n_memb': 3,
+     'params': {'mu': {'value': [-0.5, 0.0, 0.5],
+                       'trainable': True},
+                'sigma': {'value': [1.0, 1.0, 1.0],
+                          'trainable': True}}},
+
+    {'function': 'gaussian',
+     'n_memb': 3,
+     'params': {'mu': {'value': [-0.5, 0.0, 0.5],
+                       'trainable': True},
+                'sigma': {'value': [1.0, 1.0, 1.0],
+                          'trainable': True}}},
+
+    {'function': 'gaussian',
+     'n_memb': 3,
+     'params': {'mu': {'value': [-0.5, 0.0, 0.5],
+                       'trainable': True},
+                'sigma': {'value': [1.0, 1.0, 1.0],
+                          'trainable': True}}},
+
+]
+
+# generate some data (mackey chaotic time series)
+X, X_train, X_valid, y, y_train, y_valid = datagenerator.gen_data(data_id='mackey',
+                                                                  n_obs=2080, n_input=4)
+
+# create model
 model = SANFIS(membfuncs=MEMBFUNCS,
-               n_input=2,
+               n_input=4,
                scale='Std')
 optimizer = torch.optim.Adam(params=model.parameters())
 loss_functions = torch.nn.MSELoss(reduction='mean')
+
+# fit model
 history = model.fit(train_data=[X_train, y_train],
                     valid_data=[X_valid, y_valid],
                     optimizer=optimizer,
                     loss_function=loss_functions,
+                    epochs=200,
                     )
+
+# predict data
+y_pred = model.predict(X)
+
+# plot learning curves
+plottingtools.plt_learningcurves(history, save_path='img/learning_curves.pdf')
+
+# plot prediction
+plottingtools.plt_prediction(y, y_pred, save_path='img/mackey_prediction.pdf')
+
 ```
+
+
+![learning curves](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/learning_curves.pdf)
+
+![prediction mackey time series](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/mackey_prediction.pdf)
 
 ## Contact
 I am very thankful for feedback. Also, if you have questions, please contact gregor.lenhard92@gmail.com
-
-
 
 ## References
 If you use my work, please cite it appropriately:
