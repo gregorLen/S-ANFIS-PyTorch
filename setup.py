@@ -5,10 +5,10 @@ from os import path
 HERE = pathlib.Path(__file__).parent
 
 PACKAGE_NAME = 'sanfis'
-VERSION = '0.0.1'
+VERSION = '0.1.0'
 AUTHOR = 'Gregor Lenhard'
 AUTHOR_EMAIL = 'gregor.lenhard92@gmail.com'
-URL = 'https://github.com/gregorlen/sanfis'
+URL = 'https://github.com/gregorLen/S-ANFIS-PyTorch'
 
 LICENSE = 'MIT License'
 DESCRIPTION = 'Implementation to the State-Adaptive Neurofuzzy Inference System (S-ANFIS) network'
@@ -21,24 +21,22 @@ CLASSIFIERS = [
     # Specify the Python versions you support here. In particular, ensure
     # that you indicate whether you support Python 2, Python 3 or both.
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.7',
-    'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
 ],
 
 INSTALL_REQUIRES = [
-    'numpy>=1.22.3',
-    'seaborn>=0.11.2',
-    'pandas>=1.4.2',
-    'matplotlib>=3.4.3',
-    'tqdm>=4.64.0',
-    'scikit-learn>=1.0.2',
-    'tensorboard>=2.9.1'
+    'numpy',
+    'seaborn',
+    'pandas',
+    'matplotlib',
+    'tqdm',
+    'scikit-learn',
+    'tensorboard'
 ]
 
 DEV_REQUIRES = {
-    "dev": ['pytest>=3.7',
+    "dev": ['pytest',
             ]
 }
 
@@ -59,6 +57,6 @@ setup(name=PACKAGE_NAME,
       install_requires=INSTALL_REQUIRES,
       extras_require=DEV_REQUIRES,
       packages=find_packages(),
-      py_modules=['sanfis'],
-      package_dir={'': 'sanfis'},
+      py_modules=['sanfis', 'sanfis/datagenerators'],
+      # package_dir={'': 'sanfis'},
       )
