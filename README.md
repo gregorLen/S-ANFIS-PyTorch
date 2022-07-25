@@ -6,7 +6,7 @@ This is a PyTorch-based implementation of my project S-ANFIS: [State-ANFIS: A Ge
 
 S-ANFIS is a simple generalization of the ANFIS network, where the input to the premise and the consequence part of the model can be controlled separately. As general notation, I call the input the premise part "state" variables ``s`` and the input of the consequence part "input" or "explanatory" variables ``x``. 
 
-![S-ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/sanfis_architecture.pdf)
+![S-ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/sanfis_architecture.png)
 
 For an in-depth explaination, check out [our paper](https://ieeexplore.ieee.org/abstract/document/9776208).
 
@@ -138,7 +138,7 @@ model.plotmfs(bounds=[[-2.0, 2.0],  # plot bounds for first membfunc
               save_path='img/membfuncs.pdf')
 ```
 
-![membership functions](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/membfuncs.pdf)
+![membership functions](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/membfuncs.png)
 
 ### 4.2 Tensorboard
 Tensorboard provides visualization needed for machine learning experimentation. Further information can be found [here](https://www.tensorflow.org/tensorboard)
@@ -168,7 +168,7 @@ tensorboard --logdir=logs/tb
 
 
 ## 5. Using the plain vanilla ANFIS network
-![ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/anfis_architecture.pdf)
+![ANFIS architecture](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/anfis_architecture.png)
 
 To use the plain vanilla ANFIS network, simply remove the state variables `s` from the training (`fit()`). This automatically sets the same input for premise and consequence part of the model.
 
@@ -236,9 +236,9 @@ plottingtools.plt_prediction(y, y_pred, save_path='img/mackey_prediction.pdf')
 ```
 
 
-![learning curves](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/learning_curves.pdf)
+![learning curves](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/learning_curves.png)
 
-![prediction mackey time series](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/mackey_prediction.pdf)
+![prediction mackey time series](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/mackey_prediction.png)
 
 ## Contact
 I am very thankful for feedback. Also, if you have questions, please contact gregor.lenhard92@gmail.com
