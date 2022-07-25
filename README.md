@@ -1,5 +1,7 @@
 # sanfis
 
+[![PyPI version](https://badge.fury.io/py/sanfis.svg)](https://badge.fury.io/py/sanfis)
+
 This is a PyTorch-based implementation of my project S-ANFIS: [State-ANFIS: A Generalized Regime-Switching Model for Financial Modeling (2022)](https://ieeexplore.ieee.org/abstract/document/9776208). S-ANFIS is an generalization of Jang's [ANFIS: adaptive-network-based fuzzy inference system (1993)](https://ieeexplore.ieee.org/abstract/document/256541). The implemenation can easliy be used to fit an ANFIS network.
 
 ## 1. What is S-ANFIS
