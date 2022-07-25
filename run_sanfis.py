@@ -61,10 +61,10 @@ dgp_params = {"mu_params": np.array([[0.4, 0.0, 0.2, -0.4]]),
 # General Parameters
 seed = 3
 # int / None
-logdir = 'logs/runs/'
+logdir = 'img'
 use_tensorboard = False                # True / False
-plot_dgp = False                        # True / False
-plot_prediction = False                  # True / False
+plot_dgp = True                        # True / False
+plot_prediction = True                  # True / False
 plot_mfs = True                         # True / False
 plot_learningcurves = True              # True / False
 show_initial_weights = True             # True / False
@@ -116,4 +116,3 @@ if plot_learningcurves:
 # print(fis.consequence)  # print model weights
 print(
     f'\nfinal rmse train loss: {np.sqrt(train_loss):.4f} \nfinal rmse valid loss: {np.sqrt(valid_loss):.4f}')
-
