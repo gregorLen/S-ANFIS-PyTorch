@@ -30,55 +30,66 @@ pip install sanfis
 ```
 
 ## 3. Quick start
+First let's generate some data! The given example is an [AR(2)-process](https://en.wikipedia.org/wiki/Autoregressive_model) whoose AR-parameters depend on the regime of two independent state variables:
 
 ```python
-from sanfis import SANFIS
+# Load modules
+import numpy as np
 import torch
+from sanfis import SANFIS, plottingtools
+from sanfis.datagenerators import sanfis_generator
 
-# a list of membership functions
-MEMBFUNCS = [
-       {'function': 'gaussian',
-     'n_memb': 2,
-     'params': {'mu': {'value': [-0.5, 0.5],
-                       'trainable': True},
-                'sigma': {'value': [1.0, 1.0],
-                          'trainable': True}}},
-
-    {'function': 'gaussian',
-     'n_memb': 2,
-     'params': {'mu': {'value': [-0.5, 0.5],
-                       'trainable': True},
-                'sigma': {'value': [1.0, 1.0],
-                          'trainable': True}}},
-]
-
-# Create model
-model = SANFIS(membfuncs=MEMBFUNCS,
-               n_input=2,
-               scale='Std'
-               )
-optimizer = torch.optim.Adam(params=model.parameters())
-loss_functions = torch.nn.MSELoss(reduction='mean')
-
-# Generate some sample data
-S_train, S_valid = torch.randn(100, 2), torch.randn(10, 2)
-X_train, X_valid = torch.randn(100, 2), torch.randn(10, 2)
-y_train, y_valid = torch.randn(100, 1), torch.randn(10, 1)
-
-# Fit the model
-history = model.fit(train_data=[S_train, X_train, y_train],
-                    valid_data=[S_valid, X_valid, y_valid],
-                    optimizer=optimizer,
-                    loss_function=loss_functions,
-                    batch_size=100,
-                    epochs=10
-                    )
-
-# Plot resultsing membership functions 
-model.plotmfs(
-    bounds=[[-2.0, 2.0], [-2.0, 2.0]],
-)
+# seed for reproducibility
+np.random.seed(3)
+torch.manual_seed(3)
+## Generate Data ##
+S, S_train, S_valid, X, X_train, X_valid, y, y_train, y_valid, = sanfis_generator.gen_data_ts(
+    n_obs=1000, test_size=0.33, plot_dgp=True)
 ```
+
+![s-anfis data generating process](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/sanfis_dgp_process.png)
+
+Set a list of membership functions for each of the state variables that enter the model:
+
+```python
+# list of membership functions
+membfuncs = [
+    {'function': 'sigmoid',
+     'n_memb': 2,
+     'params': {'c': {'value': [0.0, 0.0],
+                      'trainable': True},
+                'gamma': {'value': [-2.5, 2.5],
+                          'trainable': True}}},
+
+    {'function': 'sigmoid',
+     'n_memb': 2,
+     'params': {'c': {'value': [0.0, 0.0],
+                      'trainable': True},
+                'gamma': {'value': [-2.5, 2.5],
+                          'trainable': True}}}
+]
+```
+The given example uses two sigmoid functions for each state variable.
+
+Now create the model, fit and evaluate:
+
+```python
+# make model / set loss function and optimizer
+fis = SANFIS(membfuncs=membfuncs, n_input=2, scale='Std')
+loss_function = torch.nn.MSELoss(reduction='mean')
+optimizer = torch.optim.Adam(fis.parameters(), lr=0.005)
+
+# fit model
+history = fis.fit([S_train, X_train, y_train], [S_valid, X_valid, y_valid],
+                  optimizer, loss_function, epochs=1000)
+# eval model
+y_pred = fis.predict([S, X])
+plottingtools.plt_prediction(y, y_pred,
+                             save_path='img/sanfis_prediction.pdf')
+# plottingtools.plt_learningcurves(history)
+```
+
+![s-anfis prediction](https://github.com/gregorLen/sanfis-pytorch/blob/main/img/sanfis_prediction.png)
 
 ## 4. Features
 ### 4.1 Membership functions
